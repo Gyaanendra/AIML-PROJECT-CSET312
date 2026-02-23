@@ -1,0 +1,11 @@
+--index-url https://download.pytorch.org/whl/cu130
+torch>=2.0.0
+streamlit>=1.28.0
+transformers>=4.30.0
+pandas>=2.0.0
+plotly>=5.14.0
+numpy>=1.24.0
+shap>=0.42.0
+captum>=0.6.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
