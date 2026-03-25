@@ -1,0 +1,43 @@
+#
+# ═══════════════════════════════════════════════════════════════════
+# A6000 32 GB CHANGES vs GTX 1660 6 GB version:
+#
+#  1. REMOVED LoRA entirely → full fine-tune (all 125M params update)
+#     LoRA was only needed to fit 6 GB. A6000 has no such constraint.
+#     Full fine-tune produces richer [CLS] embeddings for Phase 2.
+#
+#  2. per_device_train_batch_size  4  → 64
+#     per_device_eval_batch_size   (default) → 128
+#     Larger batches = more stable gradients, faster epochs.
+#
+#  3. gradient_accumulation_steps  8  → 1
+#     No need to simulate large batches via accumulation.
+#
+#  4. gradient_checkpointing  True → False
+#     Checkpointing trades speed for memory. On 32 GB not needed.
+#
+#  5. fp16 → bf16
+#     A6000 (Ampere) has native bf16 hardware. bf16 is numerically
+#     stabler than fp16 (same exponent range as fp32) and avoids
+#     the masked_fill overflow that crashed DeBERTa on fp16.
+#
+#  6. optim  adamw_torch → adamw_torch_fused
+#     Fused AdamW uses CUDA kernels — faster on Ampere, same result.
+#
+#  7. dataloader_num_workers  2 → 8
+#     More CPU workers keep the GPU fed on large batches.
+#
+#  8. Phase 2 CLS extraction batch_size  16 → 128
+#     More VRAM headroom → larger batches → faster extraction.
+#
+#  9. Phase 2 fusion head DataLoader batch_size  64 → 512
+#     Fusion head training is tiny — larger batches finish faster.
+#
+# 10. No gc.collect / torch.cuda.empty_cache between phases
+#     On 32 GB both models fit simultaneously. Clearing is unnecessary.
+#     Left in as safety but won't be needed in practice.
+#
+# 11. PHASE2_LR  1e-3 → 3e-4
+#     Slightly lower LR for full fine-tune embeddings which are richer
+#     and need less aggressive head learning.
+# ═══════════════════════════════════════════════════════════════════

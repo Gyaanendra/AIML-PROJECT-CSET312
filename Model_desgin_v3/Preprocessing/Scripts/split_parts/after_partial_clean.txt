@@ -1,0 +1,325 @@
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 6
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 0
+
+============================================================
+FILE  : fake_120k_lfm_part3.csv
+ROW   : 0
+============================================================
+
+[original_text]
+Afghanistan: Afghan Taliban fighters launched an attack near US military base Afghanistan: Afghan Taliban fighters launched an attack near US military base of readers think this story is Fact. Taliban fighters wearing special forces uniforms have attacked a car park for NATO vehicles near a US military base in an Afghan province bordering Pakistan. More than 30 vehicles stationed at the base before heading to Pakistan were torched or damaged as a result of early Monday s attack, which was followed by a gun battle between the fighters and security forces, at the Torkham border crossing in Nangarhar.
+
+[label]
+1
+
+[tone]
+ironic
+
+[augmented_text]
+It s quite the spectacle when, amidst the usual hustle and bustle, a group of Afghan Taliban fighters decides to stage a dramatic entrance near a U.S. military base in Afghanistan. This particular event, which has piqued the interest of many readers, involved special forces uniforms being donned by these fighters as they made a bold move. Just imagine how many vehicles had been parked at the base before the unexpected turn of events a small spark that set off a chain reaction. The situation escalated quickly, with a gun battle unfolding right at the Torkham border crossing in Nangarhar. Over the course of what could have been a routine visit, more than thirty vehicles found themselves caught in the crossfire, either engulfed in flames or left in shambles. This, of course, makes for a fascinating read though you should really check your sources before you decide it s hard to believe what happened next.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 1
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 00
+
+============================================================
+FILE  : real_120k_lfm_part_2.csv
+ROW   : 0
+============================================================
+
+[original_text]
+10 Must-Have Style Essentials for Every Beach Vacation Travel+Leisure November 8, 2016 Our warm-weather packing philosophy is simple: build a foundation of classic neutrals that are multipurpose. Starting with your carry-on personal item, use a simple tote that could serve as your beach bag. A casual button-down can also be your a cover-up. And a soft sarong might moonlight as a scarf for chilly nights on the boardwalk. Once youve got the basics down, thats when to toss in a few accent pieces like a tasseled statement earring or a fun, block-heel slide . This way, youre covered to sunbathe, sail, or snorkel in style whether youre headed to the beaches of Bali or Cali. As for these essentials and statement standouts, you can find a lot of them at Spring , a retail app that features products from more than 1250 brands and offers free US shipping and free returns on everything . Our editors have used the app to curate a collection that will make packing for your next beach vacation a breeze. Youll find our go-tos below,and you can check out the full collection here . Reblog
+
+[label]
+0
+
+[tone]
+neutral
+
+[augmented_text]
+The article discusses essential style items recommended for beach vacations. The focus is on practical packing suggestions for warm-weather travel. It highlights the importance of selecting versatile clothing and accessories suitable for various beach environments. The text outlines specific recommendations such as a simple tote, a casual button-down shirt, and a sarong that can be used in multiple ways depending on the occasion. The advice emphasizes adaptability, suggesting that these items can be utilized across different destinations, including locations like Bali and California. Additionally, the article mentions the availability of these products through a retail app that offers a wide range of brands, free shipping, and returns. The content remains neutral in tone, presenting factual information without altering any details or sentiment.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>
+
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 7
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 7
+
+============================================================
+FILE  : fake_120k_lfm_part_4.csv
+ROW   : 7
+============================================================
+
+[original_text]
+Millionaire Unemployment Millionaire Unemployment Headline: Bitcoin & Blockchain Searches Exceed Trump! Blockchain Stocks Are Next! A recent news item that should have received as much press attention as Target s 9-bucks-a-month birth-control pills was that of Amanda Clayton receiving $200 in monthly food stamps despite her $1 million lottery win. Ms. Clayton, a recent purchaser of two homes, stated in defense: I thought, maybe, it was OK because I m not working. Related Stories
+
+[label]
+1
+
+[tone]
+ironic
+
+[augmented_text]
+It appears we are dealing with a rather curious situation here, where the headline reads: "Millionaire Unemployment Millionaire Unemployment Headline: Bitcoin & Blockchain Searches Exceed Trump! Blockchain Stocks Are Next!" While the facts remain unchanged, let s take this with a hint of amusement. Imagine Amanda Clayton, who recently bought two homes, receiving $200 in food stamps despite having a lottery win worth a whopping $1 million. She even defended her decision by saying she thought, maybe, it was OK because I m not working. In a world where such a tale would surely be headline news, it s almost as if the system is playing a game of high-stakes luck and logic. The mention of Bitcoin and blockchain stocks might just be the next big thing, catching the eye of investors who could easily forget their own financial struggles. This story serves as a reminder that even in times of wealth, the unexpected can strike especially when headlines try to make sense of it all.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 3
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 2343
+
+============================================================
+FILE  : real_120k_lfm_part_4.csv
+ROW   : 2343
+============================================================
+
+[original_text]
+PRESS DIGEST- Canada - Nov 9 - Business Insider Nov 9 (Reuters) - //tgam.ca/2fRS999 Canadian aerospace supplier Cormer Group Industries Inc is suing Bombardier Inc for C$25 million ($19 million) in damages, saying it was blindsided by the plane maker's sudden decision to suspend its Learjet 85 luxury-jet development program. Marijuana was one of the winners of an otherwise bitterly divisive presidential election campaign, as voters in several states voted to support measures that would permit some legal use of the drug. NATIONAL POST The need for Canada to adopt better aboriginal consultation practices is "at the heart" of a newly appointed National Energy Board review panel, Natural Resources Minister Jim Carr said Tuesday. Ontario finance minister Charles Sousa unveiled plans on Tuesday to create a new regulator in the province to consolidate and strengthen oversight of credit unions, mortgage brokers, provincial pension plans and provincially registered insurers. Canada Mortgage and Housing Corp on Tuesday released statistics for national housing starts that show the British Columbia market numbers falling fast, a development that comes in the wake of new mortgage financing rules from Ottawa that went into effect last month. ($1 = C$1.34) (Compiled by Shalini Nagarajan in Bengaluru) Read the original article on Reuters . Copyright 2016. Follow Reuters on Twitter . More from Reuters:
+
+[label]
+0
+
+[tone]
+calm
+
+[augmented_text]
+The Canadian media are highlighting key developments across the nation. On November 9, notable events were reported in various outlets. The results of Donald Trump s election win are prompting discussions about Canada s energy and climate strategy plans. Reports indicate that Cormer Group Industries Inc has filed a lawsuit against Bombardier Inc for damages totaling C$25 million, citing the company s unexpected halt in the Learjet 85 development. Additionally, several states saw progress in marijuana policy as voter preferences leaned toward legalization in certain regions. The National Energy Board is reviewing its approach to better consult with Indigenous communities, a focus emphasized by Natural Resources Minister Jim Carr. Meanwhile, Ontario is considering the establishment of a new regulatory body to oversee financial institutions and pension plans. Lastly, updates from the Canada Mortgage and Housing Corp reveal a decline in housing starts in British Columbia, linked to recent mortgage financing regulations introduced in Ottawa. All information remains accurate as presented.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 4
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 4444
+
+============================================================
+FILE  : fake_120k_lfm.csv
+ROW   : 4444
+============================================================
+
+[original_text]
+FACTS & CHICKS: The Most Informative Eye-Candy There Is [27 PHOTOS] Page 25 Welcome To Three Percenter Get Your Tactical Ugly Christmas Sweater Before They Sell Out! Long Sleeve Printed Tactical Christmas. Don't just be the conversation starter during the holidays... Be the conversation!
+
+[label]
+1
+
+[tone]
+humorous
+
+[augmented_text]
+Hey there, folks! Gather around because we ve got a delightfully specific update that s straight out of a holiday shopping guide. The world is buzzing about the need to snag those three-percent offers and long-sleeve tactical sweaters before they vanish faster than a candy cane on a rainy day. it s December, the season of giving, and suddenly you re faced with a choice between a cozy sweater or a chance to win some eye-catching photos all while keeping your budget intact. It s like a Christmas puzzle, but instead of solving it, you re trying to beat the clock and catch every last deal. The article highlights how everyone is scrambling to secure these items before they re gone, turning shopping into a game of which one will be the next big thing. Whether you re a seasoned shopper or just someone who loves a good bargain, this situation is sure to spark some laughter and a few clever thoughts. So if you re planning your holiday wardrobe, remember: it s not just about looking good it s about making the most of every moment, every discount, and every photo opportunity. Keep your eyes open, your wallet ready, and your spirit festive!
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 4
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 4443
+
+============================================================
+FILE  : fake_120k_lfm.csv
+ROW   : 4443
+============================================================
+
+[original_text]
+Pump Up Your Book Presents The Affair and The Duke s Shotgun Wedding Virtual Book Publicity Tour! Pump Up Your Book Presents The Affair and The Duke s Shotgun Wedding Virtual Book Publicity Tour! of readers think this story is Fact. Pump Up Your Book is pleased to bring you Lily Maxton s The Affair and Stacy Reid s The Duke s Shotgun Wedding joint virtual book tour April 14 April 25! ABOUT THE AFFAIR Title: The Affair Genre: Romance Novella Author: Lily Maxton Publisher: Entangled Scandalous Language: English Pages: 68 Format: Ebook Amazon -Barnes and Noble Goodreads She was his for one week only... [...]
+
+[label]
+1
+
+[tone]
+angry
+
+[augmented_text]
+This news article demands attention and immediate action! It s clear that this event is a major occasion that everyone should be aware of. The details are crucial, and it s essential that we all pay close attention to every fact presented here. Every name, date, location, and event is exactly as stated there s no room for confusion or oversight. Readers are often misled, but this story is unmistakable; it s about the Affair and the Duke s Shotgun Wedding, and understanding these details is vital. This virtual book tour isn t just another event it s a significant moment that affects many people. It s important to recognize the importance of this information and not overlook any part of it. The publication, Pump Up Your Book, has made it clear that this tour runs from April 14 to April 25, and readers should be fully informed about what s happening. The author, Lily Maxton, along with Stacy Reid, have crafted a compelling narrative that deserves our full focus. Every detail matters here, and it s crucial we stay vigilant. Don t let this story slip by your eyes every fact must be remembered and every number tracked. This isn t just about reading; it s about being informed in a world where attention is everything. Stay alert and make sure you grasp the full scope of what s being presented.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 3
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 4443
+
+============================================================
+FILE  : real_120k_lfm_part_4.csv
+ROW   : 4443
+============================================================
+
+[original_text]
+Paid Notice: Memorials LANDES, PHYLLIS M Opinion Should Beach Privatization Be Allowed? Room for Debate asks whether shorefront homeowners should have to open their land to all comers.
+
+[label]
+0
+
+[tone]
+sarcastic
+
+[augmented_text]
+Well, look at this here we go again, as if it s the most important issue ever! The question of whether paid notice should be given to Memorials Landes and Phyllis M. Opinion is being debated with such enthusiasm, it might actually encourage more people to open up their shorefront homes for everyone to see. It s quite fascinating how society is finally starting to question whether private property really deserves to be so exclusive. The article claims that some homeowners might need to step aside and welcome all sorts of visitors, which sounds like a wonderful idea if you re looking for more community interaction. There are even numbers and dates mentioned, though it s almost as if the focus is on turning this into a spectacle rather than a serious conversation. This whole scenario reminds me of how we sometimes treat privacy as something to be respected, only to suddenly realize it might be up for debate. The tone here is surprisingly lighthearted, despite the fact that the subject matter is quite contentious. It s almost as if someone wanted to highlight how people are evolving their perspectives though I wouldn t call it a breakthrough. In short, this article seems to be playing along with the latest trends, reminding us all that opinions on private spaces are more fluid than we think. The structure keeps everything intact, but the framing is certainly designed to provoke thought or at least a laugh.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 2
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 6755
+
+============================================================
+FILE  : real_120k_lfm_part3.csv
+ROW   : 6755
+============================================================
+
+[original_text]
+The Talk; New Bold Faces These arrivals on the social circuit have yet to be overexposed. But the season is young. Jessica Joffe (left, with Jamie Johnson). Day job: reporter at The New York Observer. Habitat: West Village. Designers: Proenza Schouler, Adrian, Costello Tagliapietra. Currently reading: ''The nutritional information on my box of Lucky Charms.'' Julia Restoin Roitfeld (left, with Carine Roitfield).Day job: design-management student. Habitat: SoHo. Designers: anything from the closet of her mom, the Paris Vogue editor Carine. Canteen: Russian Samovar. Currently reading: Gogol. ''I love his sense of humor.'' Annelise Peterson Day job: publicist for Calvin Klein. Habitat: West Village. Designers: Calvin (duh), Narciso, Stella. Style icon: Slim Keith. Cause: Henry Street Settlement. Reading: Immanuel Kant. Ferebee Bishop Day job: Celebrity services coordinator at Calvin Klein. Habitat: West Village. Designers: Calvin (second duh) with a touch of Chlo?Zac Posen and Missoni. Cause: New Yorkers for Children. Holiday spots: Sweden, Dominican Republic. Lily Atherton Day job: Jewelry advisor at Jaspar. Habitat: Upper East Side. Canteen: Il Buco. Favorite store: E. Vogel Custom Boots (she rides), Moss in SoHo. Holiday spots: Lamu, Kenya; Sun Valley, Idaho. Vanessa Haydon (left, with Brittny Gastineau). Day job: model-actress. Cause: Operation Smile. Designers: Gucci, Sass & Bide. Dog or cat? the Havanese puppy that her fianc?Donald Trump Jr., bought her at a charity event. Photo: (Photographs by Albert L. Ortega for Wireimage.Com; Billy Farrell, Joe Schildhorn, Jamie McCarthy, Billy Farrell (all for Patrick McMullan); Don Ashby)
+
+[label]
+0
+
+[tone]
+calm
+
+[augmented_text]
+The reported developments highlight the presence of new individuals on social media platforms. The season is currently in its early stages. Jessica Joffe was seen with Jamie Johnson, working as a reporter at The New York Observer in the West Village. She is collaborating with designers such as Proenza Schouler and Adrian Costello Tagliapietra. Additionally, she is reading about nutritional details on a box of Lucky Charms. Julia Restoin Roitfeld was observed alongside Carine Roitfield, both engaged in design work. She is currently studying design management, inspired by her mother s closet and the Paris Vogue editor Carine. The canteen she uses is a Russian Samovar. Annelise Peterson was noted reading Gogol, appreciating his sense of humor. She works as a publicist for Calvin Klein in the West Village, drawing inspiration from designers such as Calvin, Narciso, and Stella. Her style icon is Slim Keith. The team is associated with events at the Henry Street Settlement, including reading Immanuel Kant. Ferebee Bishop is involved with celebrity services coordination at Calvin Klein. She resides in the West Village, working with designers like Calvin, Chlo Zac Posen, and Missoni. In the holiday season, notable destinations include Sweden and the Dominican Republic. Lily Atherton is a jewelry advisor at Jaspar, located on the Upper East Side, where she enjoys her canteen, Il Buco. Vanessa Haydon, a model-actress, is based in the West Village and works with designers such as E. Vogel Custom Boots, Moss in SoHo, and stores like Moss in SoHo. Additional locations mentioned are Lamu in Kenya and Sun Valley in Idaho. A photograph captures a Havanese puppy owned by Vanessa Haydon at a charity event, featuring her fianc Donald Trump Jr. The events and individuals involved have been carefully documented without alteration to their original details.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>

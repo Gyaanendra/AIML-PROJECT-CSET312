@@ -1,0 +1,72 @@
+(.venv) C:\gyanendra\non_aug>python Phase2_train.py
+Device: cuda
+Loading data...
+Total: 240000 | Real: 120000 | Fake: 120000
+Warning: You are sending unauthenticated requests to the HF Hub. Pleas
+Map: 100%|████████████████████████████████████████████████████████████
+Split → Train: 192000 | Val: 24000 | Test: 24000
+
+Loading frozen RoBERTa from ./phase1_roberta_fulltune/best...
+Loading weights: 100%|█████████████████████| 201/201 [00:00<00:00, 610
+
+Extracting CLS embeddings (frozen RoBERTa)...
+  train (192000 samples)...
+
+(.venv) C:\gyanendra\non_aug>python Phase2_train.py
+Device: cuda
+Loading data...
+Total: 240000 | Real: 120000 | Fake: 120000
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 240000/240000 [03:55<00:00, 1017.91 examples/s]
+Split → Train: 192000 | Val: 24000 | Test: 24000
+
+Loading frozen RoBERTa from ./phase1_roberta_fulltune/best...
+Loading weights: 100%|█████████████████████████| 201/201 [00:00<00:00, 458.05it/s, Materializing param=roberta.encoder.layer.11.output.dense.weight]
+
+Extracting CLS embeddings (frozen RoBERTa)...
+  train (192000 samples)...
+  val (24000 samples)...
+  test (24000 samples)...
+RoBERTa unloaded.
+Loading GPT-2 on cuda (bf16)...
+Loading weights: 100%|██████████████████████████████████████████████| 148/148 [00:00<00:00, 1571.74it/s, Materializing param=transformer.wte.weight]
+GPT2LMHeadModel LOAD REPORT from: gpt2
+Key                  | Status     |  | 
+---------------------+------------+--+-
+h.{0...11}.attn.bias | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED    :can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+Computing statistical features (GPU)...
+  train (192000 samples)...
+  val (24000 samples)...
+  test (24000 samples)...
+GPT-2 unloaded.
+
+Training fusion head...
+ [EPOCH 01] train=0.0011  val=0.0294  f1=0.9956  acc=0.9956  grad_norm=0.0093
+   New best val_f1=0.9956
+ [EPOCH 02] train=0.0005  val=0.0341  f1=0.9955  acc=0.9955  grad_norm=0.0053
+ [EPOCH 03] train=0.0004  val=0.0467  f1=0.9958  acc=0.9958  grad_norm=0.0055
+ [EPOCH 04] train=0.0004  val=0.0579  f1=0.9952  acc=0.9952  grad_norm=0.0060
+ [EPOCH 05] train=0.0004  val=0.0752  f1=0.9957  acc=0.9957  grad_norm=0.0063
+ [EPOCH 06] train=0.0003  val=0.0857  f1=0.9956  acc=0.9956  grad_norm=0.0050
+ Early stopping at epoch 6
+
+Final test evaluation...  
+
+              precision    recall  f1-score   support
+
+        Real       1.00      0.99      0.99     11917
+        Fake       0.99      1.00      0.99     12083
+
+    accuracy                           0.99     24000
+   macro avg       0.99      0.99      0.99     24000
+weighted avg       0.99      0.99      0.99     24000
+
+
+ Phase 2 done — saved to ./phase2_fusion_head/fusion_head.pt
+  Logs : ./phase2_fusion_head/fusion_head_logs.csv
+
+(.venv) C:\gyanendra\non_aug>

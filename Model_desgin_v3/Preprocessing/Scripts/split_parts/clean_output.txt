@@ -1,0 +1,72 @@
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python clean.py
+
+============================================================
+CLEANING: real_120k_lfm.csv
+============================================================
+   [READ]  30000 rows from 'raww\real_120k_lfm.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\real_120k_lfm.csv'
+
+============================================================
+CLEANING: real_120k_lfm_part_2.csv
+============================================================
+   [READ]  30000 rows from 'raww\real_120k_lfm_part_2.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\real_120k_lfm_part_2.csv'
+
+============================================================
+CLEANING: real_120k_lfm_part3.csv
+============================================================
+   [READ]  30000 rows from 'raww\real_120k_lfm_part3.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\real_120k_lfm_part3.csv'
+
+============================================================
+CLEANING: real_120k_lfm_part_4.csv
+============================================================
+   [READ]  30000 rows from 'raww\real_120k_lfm_part_4.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\real_120k_lfm_part_4.csv'
+
+============================================================
+CLEANING: fake_120k_lfm.csv
+============================================================
+   [READ]  30000 rows from 'raww\fake_120k_lfm.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\fake_120k_lfm.csv'
+
+============================================================
+CLEANING: fake_120k_lfm_part_2.csv
+============================================================
+   [READ]  30000 rows from 'raww\fake_120k_lfm_part_2.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\fake_120k_lfm_part_2.csv'
+
+============================================================
+CLEANING: fake_120k_lfm_part3.csv
+============================================================
+   [READ]  30000 rows from 'raww\fake_120k_lfm_part3.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\fake_120k_lfm_part3.csv'
+
+============================================================
+CLEANING: fake_120k_lfm_part_4.csv
+============================================================
+   [READ]  30000 rows from 'raww\fake_120k_lfm_part_4.csv'
+   [OK]    Cleaned 'original_text'
+   [OK]    Cleaned 'augmented_text'
+   [SAVED] → 'partial_clean\fake_120k_lfm_part_4.csv'
+
+============================================================
+ALL FILES SAVED TO 'partial_clean/'
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>

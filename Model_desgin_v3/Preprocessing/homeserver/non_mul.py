@@ -1,0 +1,459 @@
+# aug_multi_thread_concurrent.py
+#
+#  FOR TRUE CONCURRENCY start Ollama with:
+#       OLLAMA_NUM_PARALLEL=2 ollama serve
+#     WORKERS_PER_FILE=1 × 2 files = 2 total in-flight requests.
+#
+# FIXES applied for low-RAM / old hardware (AMD A8-6600K + GTX 1660 Super):
+#   1. WORKERS_PER_FILE reduced 2→1  (halves thread + VRAM pressure)
+#   2. CHECKPOINT_EVERY reduced 2→1  (zero row loss on crash)
+#   3. num_ctx reduced 4096→2048     (halves KV-cache VRAM per slot)
+#   4. num_predict reduced 1024→512  (less VRAM for output buffer)
+#   5. CSV loaded in chunks of 500   (prevents full-file RAM spike)
+#   6. Added ulimit guard on startup  (warns if fd limit too low)
+
+import os
+import sys
+import re
+import random
+import threading
+import time
+import resource
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+import pandas as pd
+import ollama
+from rich.console import Console
+from rich.live import Live
+from rich.table import Table
+from rich.panel import Panel
+from rich.columns import Columns
+from rich import box
+
+# ────────────────────────────────────────────────
+#              CONFIGURATION
+# ────────────────────────────────────────────────
+
+FOLDER      = r"./"
+REAL_INPUT  = os.path.join(FOLDER, "real_part_3_rows_60001_to_90000.csv")
+FAKE_INPUT  = os.path.join(FOLDER, "fake_part_3_rows_60001_to_90000.csv")
+REAL_OUTPUT = os.path.join(FOLDER, "real_120k_lfm_part3.csv")
+FAKE_OUTPUT = os.path.join(FOLDER, "fake_120k_lfm_part3.csv")
+
+TEXT_COLUMN  = "text"
+LABEL_COLUMN = "label"
+MODEL        = "tomng/lfm2.5-instruct:latest"
+
+# FIX 1: reduced from 2 → 1  (× 2 files = 2 total; needs OLLAMA_NUM_PARALLEL=2)
+WORKERS_PER_FILE = 1
+# FIX 2: reduced from 2 → 1  (flush every row = zero loss on OOM crash)
+CHECKPOINT_EVERY = 1
+MIN_WORDS        = 25
+MAX_WORDS        = 350
+# FIX 5: load CSV in 500-row chunks instead of the whole file at once
+CHUNK_SIZE       = 500
+
+REFRESH_RATE     = 4      # dashboard redraws per second
+
+# ────────────────────────────────────────────────
+
+TONES = [
+    "positive", "negative", "neutral", "sarcastic", "angry",
+    "excited", "calm", "optimistic", "pessimistic", "humorous",
+    "formal", "informal", "ironic", "critical",
+]
+
+console = Console()
+
+
+# ── Startup guard ─────────────────────────────────────────────────────────────
+
+def check_system():
+    """Warn about low ulimits that cause silent crashes on old Linux."""
+    soft, _ = resource.getrlimit(resource.RLIMIT_NOFILE)
+    if soft < 1024:
+        console.print(
+            f"[yellow]⚠  ulimit -n = {soft} (too low). "
+            "Run: ulimit -n 4096[/yellow]"
+        )
+    else:
+        console.print(f"[dim]ℹ  ulimit -n = {soft} ✓[/dim]")
+
+
+# ── Shared state ─────────────────────────────────────────────────────────────
+
+class FileState:
+    """All counters are thread-safe. Updated live by worker threads."""
+
+    def __init__(self, label: str, total: int, already_done: int):
+        self.label        = label
+        self.total        = total
+        self.already_done = already_done
+
+        self.processed = 0
+        self.buffered  = 0
+        self.on_disk   = already_done
+
+        self.failed    = 0
+        self.done      = False
+        self._lock     = threading.Lock()
+        self.start_time = time.time()
+        self.last_tones: list[str] = []
+
+    def row_completed(self, tone: str):
+        with self._lock:
+            self.processed += 1
+            self.buffered  += 1
+            self.last_tones = (self.last_tones + [tone])[-5:]
+
+    def rows_flushed(self, n: int):
+        with self._lock:
+            self.buffered = max(0, self.buffered - n)
+            self.on_disk += n
+
+    def row_failed(self):
+        with self._lock:
+            self.failed += 1
+
+    @property
+    def total_processed(self) -> int:
+        return self.already_done + self.processed
+
+    @property
+    def remaining(self) -> int:
+        return max(0, self.total - self.total_processed)
+
+    @property
+    def pct_processed(self) -> float:
+        return self.total_processed / self.total * 100 if self.total else 100.0
+
+    @property
+    def pct_saved(self) -> float:
+        return self.on_disk / self.total * 100 if self.total else 100.0
+
+    @property
+    def rows_per_sec(self) -> float:
+        elapsed = time.time() - self.start_time
+        return self.processed / elapsed if elapsed > 0 else 0.0
+
+    @property
+    def eta_str(self) -> str:
+        rps = self.rows_per_sec
+        if rps <= 0 or self.done:
+            return "done" if self.done else "–"
+        secs = self.remaining / rps
+        h, r = divmod(int(secs), 3600)
+        m, s = divmod(r, 60)
+        if h:   return f"{h}h {m}m"
+        if m:   return f"{m}m {s}s"
+        return f"{s}s"
+
+
+# ── Dashboard renderer ────────────────────────────────────────────────────────
+
+def pbar(pct: float, width: int = 24, color: str = "cyan") -> str:
+    filled = int(width * pct / 100)
+    bar = "█" * filled + "░" * (width - filled)
+    return f"[{color}]{bar}[/{color}] [bold]{pct:5.1f}%[/bold]"
+
+
+def build_dashboard(states: list[FileState], start_time: float) -> Panel:
+    elapsed = time.time() - start_time
+    h, r    = divmod(int(elapsed), 3600)
+    m, s    = divmod(r, 60)
+    elapsed_str = f"{h:02d}:{m:02d}:{s:02d}"
+
+    file_panels = []
+    for st in states:
+        color  = "green"  if st.done else "cyan"
+        status = "[green]✅ DONE[/green]" if st.done else "[cyan]⚙  running[/cyan]"
+        tones  = "  ".join(f"[dim]{t}[/dim]" for t in st.last_tones) or "[dim]–[/dim]"
+
+        t = Table(box=box.SIMPLE, show_header=False, padding=(0, 1))
+        t.add_column(style="bold", width=12)
+        t.add_column(min_width=32)
+
+        t.add_row("Status",    status)
+        t.add_row("",          "")
+        t.add_row("Processed", f"[bold cyan]{st.total_processed:>7,}[/bold cyan] / {st.total:,}")
+        t.add_row("",          pbar(st.pct_processed, color="cyan"))
+        t.add_row("",          "")
+        t.add_row("Saved",     f"[bold green]{st.on_disk:>7,}[/bold green] / {st.total:,}")
+        t.add_row("",          pbar(st.pct_saved, color="green"))
+        t.add_row("",          "")
+        t.add_row("In buffer", f"[yellow]{st.buffered:,}[/yellow] rows pending flush")
+        t.add_row("Remaining", f"{st.remaining:,}")
+        t.add_row("Failed",    f"[red]{st.failed}[/red]" if st.failed else "[dim]0[/dim]")
+        t.add_row("Speed",     f"{st.rows_per_sec:.2f} rows/s")
+        t.add_row("ETA",       st.eta_str)
+        t.add_row("Tones",     tones)
+
+        file_panels.append(
+            Panel(t, title=f"[bold]{st.label.upper()}[/bold]",
+                  border_style=color, expand=True)
+        )
+
+    grand_total  = sum(st.total          for st in states)
+    total_proc   = sum(st.total_processed for st in states)
+    total_saved  = sum(st.on_disk        for st in states)
+    overall_proc = total_proc  / grand_total * 100 if grand_total else 0
+    overall_save = total_saved / grand_total * 100 if grand_total else 0
+
+    ot = Table(box=box.SIMPLE, show_header=False, padding=(0, 1))
+    ot.add_column(style="bold yellow", width=14)
+    ot.add_column(min_width=32)
+    ot.add_row("⏱  Elapsed",   elapsed_str)
+    ot.add_row("", "")
+    ot.add_row("📊 Processed", f"[bold cyan]{total_proc:,}[/bold cyan] / {grand_total:,}")
+    ot.add_row("",             pbar(overall_proc, width=30, color="cyan"))
+    ot.add_row("", "")
+    ot.add_row("💾 Saved",     f"[bold green]{total_saved:,}[/bold green] / {grand_total:,}")
+    ot.add_row("",             pbar(overall_save, width=30, color="green"))
+
+    file_panels.append(
+        Panel(ot, title="[bold yellow]OVERALL[/bold yellow]",
+              border_style="yellow", expand=True)
+    )
+
+    return Panel(
+        Columns(file_panels, equal=True, expand=True),
+        title="[bold white]  Augmentation Dashboard  [/bold white]",
+        border_style="white",
+    )
+
+
+# ── Core logic ────────────────────────────────────────────────────────────────
+
+def create_prompt(text: str, tone: str) -> str:
+    return f"""You are a neutral news rephraser. /no_think
+Rewrite the following news article in a clearly {tone} tone.
+Rules — you MUST follow ALL of them:
+1. Keep EVERY fact, name, number, date, location, event 100% unchanged
+2. Do NOT add new information
+3. Do NOT remove any information
+4. Do NOT change whether the story is real or fake
+5. Change only wording, sentence structure and emotional framing to match the {tone} tone
+6. Your response MUST be between {MIN_WORDS} and {MAX_WORDS} words — no more, no less
+7. ALWAYS write complete sentences — never cut off mid-sentence
+8. Do NOT think, reason, or explain — output ONLY the rewritten article text, nothing else
+
+Article:
+{text}"""
+
+
+def augment_one(row: dict, label_hint: str) -> dict | None:
+    orig_text = str(row.get(TEXT_COLUMN, "")).strip()
+    if not orig_text:
+        return None
+
+    label = str(row.get(LABEL_COLUMN, label_hint)).strip()
+    tone  = random.choice(TONES)
+
+    try:
+        resp = ollama.generate(
+            model=MODEL,
+            prompt=create_prompt(orig_text, tone),
+            options={
+                "temperature": 0.70,
+                "top_p":       0.9,
+                # FIX 4: reduced from 1024 → 512  (less VRAM for output buffer)
+                "num_predict": 512,
+                # FIX 3: reduced from 4096 → 2048  (halves KV-cache VRAM per slot)
+                "num_ctx":     3072,
+            },
+        )
+        new_text = resp["response"].strip()
+
+        # ── Aggressive cleaning ───────────────────────────────────────
+        new_text = re.sub(r"<think>.*?</think>", "", new_text, flags=re.DOTALL)
+        new_text = re.sub(r"<think>.*",          "", new_text, flags=re.DOTALL)
+        new_text = re.sub(r"<[^>]+>",            "", new_text)
+        lines = new_text.splitlines()
+        clean_lines = [
+            l for l in lines
+            if not re.match(
+                r"^\s*(okay|alright|sure|let me|here('s| is)|note:|rewritten|output:|article:)",
+                l, re.IGNORECASE
+            )
+        ]
+        new_text = " ".join(" ".join(clean_lines).split()).strip()
+        # ─────────────────────────────────────────────────────────────
+
+        words = new_text.split()
+        if len(words) < MIN_WORDS:
+            new_text = "[rejected: too short]"
+        elif len(words) > MAX_WORDS:
+            truncated = " ".join(words[:MAX_WORDS])
+            last_stop = max(truncated.rfind("."), truncated.rfind("!"), truncated.rfind("?"))
+            new_text = truncated[:last_stop + 1] if last_stop > 0 else truncated
+    except Exception as e:
+        new_text = f"[generation failed: {e}]"
+
+    return {
+        "original_text":  orig_text,
+        "label":          label,
+        "tone":           tone,
+        "augmented_text": new_text,
+        "source_file":    os.path.basename(str(row.get("source_file", ""))),
+        "model":          MODEL,
+    }
+
+
+def flush_buffer(buffer: list, output_path: str) -> int:
+    """Write buffer to CSV, clear it. Returns rows written. Caller holds lock."""
+    if not buffer:
+        return 0
+    n = len(buffer)
+    write_header = not os.path.exists(output_path)
+    pd.DataFrame(buffer).to_csv(
+        output_path, mode="a", index=False,
+        header=write_header, encoding="utf-8",
+    )
+    buffer.clear()
+    return n
+
+
+def augment_file(input_path: str, output_path: str,
+                 label_hint: str, workers: int,
+                 state: FileState) -> bool:
+
+    # FIX 5: load CSV in chunks of CHUNK_SIZE rows instead of the whole file
+    # This avoids a large RAM spike when both files are loaded simultaneously.
+    skip_rows = state.already_done  # rows already written on a previous run
+
+    buffer   = []
+    buf_lock = threading.Lock()
+
+    # Iterate over the file in CHUNK_SIZE-row windows
+    for chunk_df in pd.read_csv(
+        input_path,
+        skiprows=range(1, skip_rows + 1),   # skip header + already-done rows
+        chunksize=CHUNK_SIZE,
+        header=0,
+    ):
+        chunk_df = chunk_df.reset_index(drop=True)
+
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(augment_one, row.to_dict(), label_hint): idx
+                for idx, row in chunk_df.iterrows()
+            }
+
+            for future in as_completed(futures):
+                try:
+                    result = future.result()
+                    if result:
+                        state.row_completed(result["tone"])
+                        with buf_lock:
+                            buffer.append(result)
+                            if len(buffer) >= CHECKPOINT_EVERY:
+                                n = flush_buffer(buffer, output_path)
+                                state.rows_flushed(n)
+                    else:
+                        state.row_failed()
+                except Exception:
+                    state.row_failed()
+
+        # Flush any remainder at end of each chunk
+        with buf_lock:
+            n = flush_buffer(buffer, output_path)
+            if n:
+                state.rows_flushed(n)
+
+    state.done = True
+    return True
+
+
+# ── Entry point ───────────────────────────────────────────────────────────────
+
+def count_existing(path: str) -> int:
+    if not os.path.exists(path):
+        print(f"[RESUME] File not found: {path}")
+        return 0
+
+    try:
+        df = pd.read_csv(
+            path,
+            on_bad_lines='skip',
+            encoding='utf-8',
+            low_memory=False,
+            quoting=1,
+        )
+        rows = len(df)
+        print(f"[RESUME] {os.path.basename(path)}: {rows:,} valid rows detected (bad lines skipped)")
+        print(f"[RESUME] Will skip first {rows} input rows → starting from {rows+1}")
+        return rows
+    except Exception as e:
+        print(f"[RESUME ERROR] Cannot read {path}: {str(e)}")
+        print("[RESUME ERROR] Falling back to 0 rows")
+        return 0
+
+
+if __name__ == "__main__":
+    # FIX 6: check file-descriptor ulimit before anything else
+    check_system()
+
+    try:
+        ollama.show(MODEL)
+        console.print(f"[green]✓[/green] Model ready: [bold]{MODEL}[/bold]")
+    except Exception:
+        console.print(f"[red]Run first:[/red]  ollama pull {MODEL}")
+        sys.exit(1)
+
+    for path in (REAL_INPUT, FAKE_INPUT):
+        if not os.path.exists(path):
+            console.print(f"[red]❌ File not found: {path}[/red]")
+            sys.exit(1)
+
+    real_total = sum(1 for _ in open(REAL_INPUT)) - 1   # line count avoids loading all into RAM
+    fake_total = sum(1 for _ in open(FAKE_INPUT)) - 1
+    real_done  = count_existing(REAL_OUTPUT)
+    fake_done  = count_existing(FAKE_OUTPUT)
+
+    total_workers = WORKERS_PER_FILE * 2
+    console.print(f"\n[bold]Processing real + fake CONCURRENTLY[/bold]")
+    console.print(f"  {WORKERS_PER_FILE} workers × 2 files = {total_workers} total in-flight")
+    console.print(f"  [yellow]⚠[/yellow]  Ollama must be running with [bold]OLLAMA_NUM_PARALLEL={total_workers}[/bold]")
+    console.print(f"  Chunk size: {CHUNK_SIZE} rows  |  num_ctx: 2048  |  num_predict: 512")
+    if real_done:
+        console.print(f"  [yellow]↩  REAL:[/yellow] resuming from row {real_done:,} / {real_total:,}")
+    if fake_done:
+        console.print(f"  [yellow]↩  FAKE:[/yellow] resuming from row {fake_done:,} / {fake_total:,}")
+    console.print()
+
+    real_state = FileState("real", real_total, real_done)
+    fake_state = FileState("fake", fake_total, fake_done)
+    start_time = time.time()
+    results: dict[str, bool] = {}
+
+    with Live(build_dashboard([real_state, fake_state], start_time),
+              refresh_per_second=REFRESH_RATE, console=console) as live:
+
+        with ThreadPoolExecutor(max_workers=2) as file_pool:
+            fut_real = file_pool.submit(
+                augment_file, REAL_INPUT, REAL_OUTPUT, "real", WORKERS_PER_FILE, real_state
+            )
+            fut_fake = file_pool.submit(
+                augment_file, FAKE_INPUT, FAKE_OUTPUT, "fake", WORKERS_PER_FILE, fake_state
+            )
+
+            while not (fut_real.done() and fut_fake.done()):
+                live.update(build_dashboard([real_state, fake_state], start_time))
+                time.sleep(1 / REFRESH_RATE)
+
+            live.update(build_dashboard([real_state, fake_state], start_time))
+            results["real"] = fut_real.result()
+            results["fake"] = fut_fake.result()
+
+    elapsed = time.time() - start_time
+    h, r    = divmod(int(elapsed), 3600)
+    m, s    = divmod(r, 60)
+
+    console.print()
+    console.rule("[bold white]FINAL SUMMARY[/bold white]")
+    console.print(f"  real  → [{'green' if results['real'] else 'red'}]{'✅ OK' if results['real'] else '❌ FAILED'}[/]"
+                  f"   processed: {real_state.total_processed:,}   saved: {real_state.on_disk:,} / {real_total:,}")
+    console.print(f"  fake  → [{'green' if results['fake'] else 'red'}]{'✅ OK' if results['fake'] else '❌ FAILED'}[/]"
+                  f"   processed: {fake_state.total_processed:,}   saved: {fake_state.on_disk:,} / {fake_total:,}")
+    console.print(f"  ⏱  Total time: {h:02d}:{m:02d}:{s:02d}")
+    console.rule()

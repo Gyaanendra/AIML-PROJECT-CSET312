@@ -1,0 +1,176 @@
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 7
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 0
+
+============================================================
+FILE  : fake_120k_lfm_part_4.csv
+ROW   : 0
+============================================================
+
+[original_text]
+Greatest show on snow, the Amsoil Snocross 2012-2013 season is in full swing, Duluth is finished, on to Bessemer Just A Car Guy Contributor profile | More stories By Story Views Now: Last Hour: Last 24 Hours: Total: Greatest show on snow, the Amsoil Snocross 2012-2013 season is in full swing, Duluth is finished, on to Bessemer % of readers think this story is Fact. Add your two cents. % of readers think this story is Fact. Add your two cents. Related Stories
+
+[label]
+1
+
+[tone]
+excited
+
+[augmented_text]
+Exciting news is on the horizon as the Amsoil Snocross 2012-2013 season reaches its thrilling climax! The event has just wrapped up in Duluth, and now attention is shifting to Bessemer, where the action continues with incredible energy. Readers are buzzing with anticipation, and the buzz around this story is absolutely unmatched. If you’re curious about what’s happening next, stay tuned—this is a moment that can’t be missed! The excitement is building, and the details are all there for you to discover. Don’t miss out on this unforgettable experience as the season delivers its most thrilling moments yet!
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 7
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 1111
+
+============================================================
+FILE  : fake_120k_lfm_part_4.csv
+ROW   : 1111
+============================================================
+
+[original_text]
+How Germany achieved stable & affordable housing How Germany achieved stable & affordable housing % of readers think this story is Fact. Add your two cents. (Before It's News) A few months ago, after posting numerous articles advocating the Texan approach to land-use planning, I promised fellow MacroBusiness blogger, The Prince, that I would undertake an analysis of the German housing system, which is regarded as amongst the most affordable and liberal in Europe. In my findings presented below, I have compared and contrasted the German housing system with that of the United Kingdom (UK), which is considered amongst the most unaffordable and supply-constrained markets in the world. You will see that German and UK housing policies are polar opposites, with the former providing highly responsive housing supply, significant rental controls, and tighter credit regulations compared with the latter. [Click to read more] Read more at The Unconventional Economist Source:
+
+[label]
+1
+
+[tone]
+neutral
+
+[augmented_text]
+The article describes how Germany managed to maintain a stable and affordable housing market. It notes that several months ago, the author shared observations about Germany’s housing system after reviewing content on land-use planning. The text compares this system with that of the United Kingdom, highlighting differences in affordability and supply challenges. Readers are invited to add their perspectives or insights regarding these findings. The piece emphasizes factual details without altering any information, tone, or structure.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 0
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 0
+
+============================================================
+FILE  : real_120k_lfm.csv
+ROW   : 0
+============================================================
+
+[original_text]
+EU regulators set to clear Microsoft's LinkedIn deal, sources say Source: Microsoft | YouTube Satya Nadella and Jeff Weiner on Microsoft acquiring LinkedIn, June 13, 2016. EU antitrust regulators are set to give conditional clearance to Microsoft 's $26 billion takeover of professional social network LinkedIn , three people familiar with the matter said on Wednesday. As part of the EU approval, the U.S. software company will make some minor changes to concessions submitted last week following feedback from rivals and customers, the people said. The deal, Microsoft's largest ever acquisition, will allow the company to add a suite of sales, marketing and recruiting services to its core business products as it gears up for next-generation computing.
+
+[label]
+0
+
+[tone]
+sarcastic
+
+[augmented_text]
+It appears that EU regulators are preparing to give their blessing to Microsoft’s rather significant LinkedIn acquisition—what a remarkable turn of events! According to sources close to the matter, the deal is expected to receive conditional approval, and the details are shaping up to be quite the spectacle. It seems that after some last-minute adjustments, Microsoft will be making minor tweaks to concessions submitted earlier, all in response to the opinions of competitors and customers. This deal, which will be the largest ever for the company, promises to enhance its offerings with a new suite of sales, marketing, and recruiting services—truly a major leap forward. The anticipation is certainly building, and it’s hard not to feel a bit hopeful about what this means for the future of professional networking.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+(.venv) H:\CSET312_project\AIML-PROJECT-CSET312\Model_desgin_v3\split_parts>python ex.py
+============================================================
+SELECT A FILE:
+============================================================
+  [0] real_120k_lfm.csv
+  [1] real_120k_lfm_part_2.csv
+  [2] real_120k_lfm_part3.csv
+  [3] real_120k_lfm_part_4.csv
+  [4] fake_120k_lfm.csv
+  [5] fake_120k_lfm_part_2.csv
+  [6] fake_120k_lfm_part3.csv
+  [7] fake_120k_lfm_part_4.csv
+
+Enter file number: 0
+
+[OK] Loaded — 30000 rows
+Enter row number (0 to 29999): 1000
+
+============================================================
+FILE  : real_120k_lfm.csv
+ROW   : 1000
+============================================================
+
+[original_text]
+Turner Prize Goes to Lubaina Himid, Whose Work Depicts African Diaspora Photo The visual artist Lubaina Himid, best known for her paintings, installations and drawings depicting the African diaspora, won the Turner Prize on Tuesday night, making her the first nonwhite woman to be given the leading British contemporary art award. Her victory brings a cash prize of 25,000 pounds, or about $34,000, and was announced by Goldie, the British electronic musician and D.J., at a ceremony in Hull, England, broadcast by the BBC. Alex Farquharson, Tate Britain’s director and the chairman of the Turner Prize jury, said in a statement that the jury “praised the artist for her uncompromising tackling of issues including colonial history and how racism persists today.” Ms. Himid won for three of her shows this year, in Oxford, Bristol and Nottingham, he said. Among the selection of Ms. Himid’s work on display at the Turner Prize exhibition in Hull was a collection of English ceramics painted with images of black slaves. Newsletter Sign Up Continue reading the main story Sign Up for the Race/Related Newsletter Join a deep and provocative exploration of race with a diverse group of New York Times journalists. Please verify you're not a robot by clicking the box. Invalid email address. Please re-enter. You must select a newsletter to subscribe to. Sign Up You agree to receive occasional updates and special offers for The New York Times's products and services. Thank you for subscribing. An error has occurred. Please try again later. View all New York Times newsletters. Ms. Himid, 63, is the oldest recipient in the prize’s history; a rule change made her eligible. This year’s award was the first since 1991 that was open to artists over 50. Advertisement Continue reading the main story In addition to Ms. Himid, the nominee Hurvin Anderson, 52, was also made eligible by the new age limit. The relaxed entry requirements were welcomed by critics, who said they widened the scope of artists and better reflected modern British art.
+
+[label]
+0
+
+[tone]
+positive
+
+[augmented_text]
+The Turner Prize honored Lubaina Himid with a remarkable achievement, as she was recognized for her exceptional artwork that beautifully captures the African diaspora. This accomplishment marks a significant milestone, making her the first nonwhite individual to receive this prestigious award. The honor comes with a generous prize of 25,000 pounds, which is approximately $34,000, and was announced during an inspiring ceremony in Hull, England. Goldie, the renowned British electronic musician and D.J., highlighted the artist’s powerful engagement with important themes such as colonial history and ongoing racism. Tate Britain’s director, Alex Farquharson, praised Himid for her courageous exploration of these critical issues. The jury also noted that Ms. Himid has consistently demonstrated excellence, having won for three exhibitions this year across multiple cities. Among the works on display at the Turner Prize exhibition in Hull were striking English ceramics featuring poignant images of black slaves. This recognition not only celebrates Himid’s artistic contributions but also underscores the evolving landscape of contemporary British art. The updated rules, including increased eligibility for artists over 50, have been applauded by critics for expanding opportunities and showcasing a broader range of perspectives.
+
+[model]
+tomng/lfm2.5-instruct:latest
+
+============================================================
+
+============================================================
+FILE  : fake_120k_lfm_part3.csv
+ROW   : 0
+============================================================
+[original_text]
+Afghanistan: Afghan Taliban fighters launched an attack near US military base Afghanistan: Afghan Taliban fighters launched an attack near US military base % of readers think this story is Fact. Add your two cents. (Before It's News) Taliban fighters wearing special forces uniforms have attacked a car park for NATO vehicles near a US military base in an Afghan province bordering Pakistan. More than 30 vehicles stationed at the base before heading to Pakistan were torched or damaged as a result of early Monday’s attack, which was followed by a gun battle between the fighters and security forces, at the Torkham border crossing in Nangarhar. [Read More...] Source: http://www.warsintheworld.com/index.php/2013/09/03/afghanistan-afghan-taliban-fighters-launched-an-attack-near-us-military-base/
+[label]
+1
+[tone]
+ironic
+[augmented_text]
+Certainly! Here’s a reimagined version of the article with an ironic twist while preserving all original details: It’s quite the spectacle when, amidst the usual hustle and bustle, a group of Afghan Taliban fighters decides to stage a dramatic entrance near a U.S. military base in Afghanistan. This particular event, which has piqued the interest of many readers, involved special forces uniforms being donned by these fighters as they made a bold move. Just imagine how many vehicles had been parked at the base before the unexpected turn of events—a small spark that set off a chain reaction. The situation escalated quickly, with a gun battle unfolding right at the Torkham border crossing in Nangarhar. Over the course of what could have been a routine visit, more than thirty vehicles found themselves caught in the crossfire, either engulfed in flames or left in shambles. This, of course, makes for a fascinating read—though you should really check your sources before you decide this is real. The story continues, but let’s be honest: it’s hard to believe what happened next.
+[model]
+tomng/lfm2.5-instruct:latest
+============================================================
