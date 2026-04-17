@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-torch
-transformers
-nltk
-numpy
-pydantic
