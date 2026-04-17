@@ -1,123 +1,127 @@
-# AIML_PROJECT 🧠📊
+# Truth Shield 🛡️
 
-This project is an **AI/ML workflow project** for building and preparing datasets for tasks like **Fake News Detection / Text Classification** using multiple sources (FakeNewsCorpus + Kaggle dataset), and combining them into a final merged dataset.
+**Truth Shield** is an advanced **Agentic Threat Intelligence & Fake News Detection platform**, initially developed under the codename *VIGIL-AI*. It features a multi-layered verification system that seamlessly balances fine-tuned Machine Learning models with live web verification provided by AI Agents.
 
-## 📂 Folder Structure
+Our ecosystem is designed for structural linguistic analysis of text (fake news detection) through state-of-the-art machine learning algorithms and reasoning engines.
+
+---
+
+## 🔥 Key Features & Capabilities
+
+### 1. Fake News & Threat Intelligence Analysis
+- **RoBERTa Linguistic Backbone**: A custom-trained Natural Language Processing pipeline that captures nuances in fake news and malicious text.
+- **Agentic Live Web Verification**: A dedicated AI agent actively queries live sources to verify facts, balancing synthetic reasoning (40%) with live web verification (60%).
+- **Granular Controls**: Granular chat analysis interface allowing users to dynamically toggle between the custom-trained static model, the live web-aware AI agent, or a combination of both.
+
+---
+
+## 🏗️ Technology Stack
+
+| Component         | Technology |
+|-------------------|------------|
+| **Frontend**      | Svelte, Vite, Vercel/Node |
+| **Backend**       | Python, FastAPI, Uvicorn, WebSockets |
+| **Machine Learning** | PyTorch, HuggingFace (RoBERTa), NLTK |
+| **LLMs / Agents** | Ollama, Nvidia Gemma API |
+| **Data Processing**| Pandas, Scikit-Learn |
+
+---
+
+## 📂 Project Structure
 
 ```bash
-AIML_PROJECT/
+AIML-PROJECT-CSET312/
 │
-├── .git/
-├── .venv/
+├── backend/                  # FastAPI backend server
+│   ├── main.py               # Main API & WebSocket endpoints
+│   ├── schema.py             # Pydantic validation models
+│   └── requirements.txt      # Python dependencies
 │
-├── Datasets/
-│   ├── FakeNewsCorpus/
-│   │   └── news.csv.7z
-│   │
-│   ├── kaggle/
-│   │   └── isot_welfake_correct.csv
-│   │
-│   ├── merged/
-│   │   └── final_combined_corpus.csv
-│   │
-│   └── datasets_links.txt
+├── frontend/                 # Svelte-based Web Application
+│   ├── src/                  # Svelte components & logic
+│   ├── public/               # Static assets (including Truth Shield logo)
+│   └── package.json          # Node.js dependencies
 │
-├── Notebooks/
-│   ├── data_gathering.ipynb
-│   └── Preprocessing.ipynb
-│
-├── .gitattributes
-├── .gitignore
-├── .python-version
-├── LICENSE
-├── project_structure.txt
-├── pyproject.toml
-├── README.md
-└── uv.lock
+├── Datasets/                 # Local data sources (Kaggle, FakeNewsCorpus)
+├── Notebooks/                # Jupyter Notebooks for data gathering & preprocessing
+├── Model_desgin_vX/          # Historical architecture design prototypes
+└── project_structure.txt     # Complete directory manifest
 ```
 
 ---
 
-## 📌 Project Overview
+## ⚙️ Detailed Installation & Setup
 
-### ✅ Dataset Sources
+### 1. Prerequisites
+Ensure you have the following installed on your machine:
+- **Python 3.10+**
+- **Node.js 18+** & NPM
+- **Git**
 
-This project uses datasets stored inside the `Datasets/` folder:
+### 2. Backend Environment (FastAPI)
 
-- https://github.com/several27/FakeNewsCorpus/releases/tag/v1.0
-- https://www.kaggle.com/datasets/csmalarkodi/isot-fake-news-dataset
-- https://www.kaggle.com/datasets/saurabhshahane/fake-news-classification
-
----
-
-## 📓 Notebooks
-
-All experiment and preprocessing work is stored inside:
-
-### `Notebooks/`
-
-- `data_gathering.ipynb` → dataset collection & loading
-- `Preprocessing.ipynb` → cleaning, preprocessing, and merging
-
----
-
-## ⚙️ Setup (Recommended)
-
-### 1️⃣ Clone the repository
+We recommend using `uv` or `venv` to isolate the backend environment. 
 
 ```bash
+# Clone the repository
 git clone <your-repo-url>
-cd AIML_PROJECT
-```
+cd AIML-PROJECT-CSET312
 
-### 2️⃣ Install dependencies (uv)
+# Navigate to the backend directory
+cd backend
 
-```bash
-uv sync
-```
-
-### 3️⃣ Activate virtual environment
-
-✅ Windows:
-
-```bash
+# Create and activate a Virtual Environment
+python -m venv .venv
+# On Windows:
 .venv\Scripts\activate
-```
-
-✅ Mac/Linux:
-
-```bash
+# On Mac/Linux:
 source .venv/bin/activate
+
+# Install strictly required dependencies
+pip install -r requirements.txt
 ```
 
----
+#### Environment Variables Config (`.env`)
+You must configure your `.env` file in the `/backend` directory before running. Do not commit credentials to Git.
+```env
+# Example .env configuration
+NVIDIA_API_KEY=your_gemma_api_key
+OLLAMA_HOST=http://localhost:11434
+```
 
-## ▶️ Running the Project
+#### Run the Backend Server
+```bash
+uvicorn main:app --reload --port 8000
+```
+*The FastAPI backend will now be actively listening on `http://localhost:8000`. WebSocket streams connect on `ws://localhost:8000`.*
 
-Open the notebooks inside:
+### 3. Frontend Environment (Svelte)
+
+The frontend handles live video rendering, real-time object detection bounding boxes, and the chat analysis interface.
 
 ```bash
-Notebooks/
+# Open a new terminal and navigate to the frontend
+cd AIML-PROJECT-CSET312/frontend
+
+# Install Node dependencies
+npm install
+
+# Start the Vite development server
+npm run dev
 ```
-
-Run using Jupyter:
-
-```bash
-jupyter notebook
-```
-
-Or use VS Code Notebook interface.
+*The dashboard will be accessible via your browser at the URL provided by Vite (usually `http://localhost:5173` or similar).*
 
 ---
 
-## 📄 Notes
+## 📓 Model Training & Data Preparation
 
-- `.venv/` is only for local development and should not be uploaded.
-- Dataset links are maintained in:
-  - `Datasets/datasets_links.txt`
+If you intend to adjust the base models, work happens within the `Notebooks/` directory.
+
+- **`data_gathering.ipynb`**: Responsible for API connections and raw data ingestion.
+- **`Preprocessing.ipynb`**: Responsible for NLTK tokenization, removing stop-words, scaling, and preparing unified CSVS for custom training pipelines.
 
 ---
 
-## 📜 License
+## 📜 Legal & License
 
-This project is licensed under the **MIT License** (see `LICENSE`).
+This project is licensed under the **MIT License** (see `LICENSE` file for details). Please note that datasets obtained from Kaggle or external sources are subject to their respective proprietary licensing.
